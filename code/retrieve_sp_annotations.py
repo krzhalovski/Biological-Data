@@ -6,7 +6,7 @@ annotations = {}
 
 with gzip.open('../data/SwissProt/uniprot_sprot.xml.gz') as sp:
     single_entry = ""
-    i=1
+    
     for line in sp:
         decoded = line.decode()
         if decoded.startswith('<entry'):
@@ -22,12 +22,8 @@ with gzip.open('../data/SwissProt/uniprot_sprot.xml.gz') as sp:
                     entry_annotations.append(dbReference.get('id'))
 
             if entry_annotations:
-                i += 1
                 annotations[root.find("accession", namespaces).text] = entry_annotations
                 single_entry = ""
-        
-        if i%10000 == 0:
-            print(f'{i} entries processed')
 
 with open("../data/SwissProt/annotations.json", "w") as f:
     json.dump(annotations, f)
